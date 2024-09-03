@@ -1,0 +1,55 @@
+Skip to content
+Navigation Menu
+zhangaonan123
+/
+pizza-example
+
+Type / to search
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+CI/CD
+Update ci.yml #2
+Jobs
+Run details
+Workflow file for this run
+.github/workflows/ci.yml at 812186c
+name: CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew  # 这一步确保 gradlew 有执行权限
+    - name: Build
+      run: ./gradlew build
+    - name: Upload
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build/
+Update ci.yml · zhangaonan123/pizza-example@812186c 
